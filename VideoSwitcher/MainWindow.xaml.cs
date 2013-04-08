@@ -22,9 +22,11 @@ namespace VideoSwitcher
 	public partial class MainWindow : Window
 	{
 		MediaElement active;
-		MediaElement[] players;
+		List<MediaElement> players;
 		Thread thr;
 		MyPipeline pipeline; 
+
+		List<MovieInfo> movies;
 
 		public MainWindow()
 		{
@@ -33,13 +35,29 @@ namespace VideoSwitcher
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
-			MediaElement1.Source = new Uri( @"file://C:\work\MIPCUBE\v\A5606EEBBA3251B5FF34B0E831B21791_bemyapp_copy_s3.mp4");
-			MediaElement2.Source = new Uri( @"file://C:\work\MIPCUBE\v\0EC6B6B943465CC1AB83BE6D040EF630_bemyapp_copy_s3.mp4");
-			MediaElement3.Source = new Uri( @"file://C:\work\MIPCUBE\v\5943E07C5CE05CEDC9BFE476425B7004_bemyapp_copy_s3.mp4");
-			MediaElement4.Source = new Uri( @"file://C:\work\MIPCUBE\v\9C7DA9935B54648C49BB4D60C5B3E555_bemyapp_copy_s3.mp4");
-			MediaElement5.Source = new Uri( @"file://C:\work\MIPCUBE\v\313146D7BE7278CE151AF53EE2934746_bemyapp_copy_s3.mp4");
+			movies = new List<MovieInfo>() {
+				new MovieInfo() { url = @"file://C:\work\MIPCUBE\v\5943E07C5CE05CEDC9BFE476425B7004_bemyapp_copy_s3.mp4", x = 0, y = 0, name = "middle front" }, 
+				new MovieInfo() { url = @"file://C:\work\MIPCUBE\v\0EC6B6B943465CC1AB83BE6D040EF630_bemyapp_copy_s3.mp4", x = 0, y = -1, name = "middle back" }, 
+				new MovieInfo() { url = @"file://C:\work\MIPCUBE\v\A5606EEBBA3251B5FF34B0E831B21791_bemyapp_copy_s3.mp4", x = -1, y = 0, name = "right front" }, 
+				new MovieInfo() { url = @"file://C:\work\MIPCUBE\v\9C7DA9935B54648C49BB4D60C5B3E555_bemyapp_copy_s3.mp4", x = 1, y = 0, name = "left front" }, 
+				new MovieInfo() { url = @"file://C:\work\MIPCUBE\v\313146D7BE7278CE151AF53EE2934746_bemyapp_copy_s3.mp4", x = 1, y = 1, name = "left very front" }, 
+			};
 
-			players = new MediaElement[] { MediaElement1, MediaElement2, MediaElement3, MediaElement4, MediaElement5 };
+			players = new List<MediaElement>();
+			foreach( var movie in movies)
+			{
+				MediaElement player = new MediaElement();
+				player.Visibility = System.Windows.Visibility.Hidden;
+				player.Height = this.Height;
+				player.Width = this.Width;
+				player.LoadedBehavior = MediaState.Manual;
+				player.MediaOpened += MediaElement1_MediaOpened;
+				player.Source = new Uri( movie.url);
+
+				mainGrid.Children.Add( player);
+
+				players.Add( player);
+			}
 
 			thr = new Thread( Pipeline);
 			thr.Start();
@@ -98,7 +116,7 @@ namespace VideoSwitcher
 				if( active == players[id])
 					return;
 
-				Trace.WriteLine( "Switched to position " + id);
+				Trace.WriteLine( "Switched to " + movies[id].name);
 
 				active = players[id];
 
@@ -124,12 +142,23 @@ namespace VideoSwitcher
 
 		public void FacePosition(float x, float y)
 		{
-			int video = (int)(x/128);
-			if( video < 0)
-				video = 0;
-			if( video > 4)
-				video = 4;
-			SwitchVideo( video);
+			Point p = ComputeFacePosition( x, y);
+
+			int minIndex = 0;
+			double minDist = 9999999;
+			for( int i = 0; i < movies.Count; i++)
+				if( Dist( movies[i], p) < minDist)
+				{
+					minDist = Dist( movies[i], p);
+					minIndex = i;
+				}
+
+			SwitchVideo( minIndex);
+		}
+
+		private Point ComputeFacePosition(double x, double y)
+		{
+			return new Point( (x/640-0.5)*2, 0);
 		}
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -141,6 +170,11 @@ namespace VideoSwitcher
 			pipeline.shouldQuit = true;
 			Thread.Sleep(1000);
 			thr.Abort();
+		}
+
+		public double Dist( MovieInfo info, Point p)
+		{
+			return Math.Sqrt( (p.X-info.x)*(p.X-info.x) + (p.Y-info.y)*(p.Y-info.y));
 		}
 	}
 }
