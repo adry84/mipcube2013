@@ -15,7 +15,8 @@ namespace VideoSwitcher
 		public bool shouldQuit;
 
         public MyPipeline( MainWindow w):base() {
-            //EnableGesture();
+            EnableGesture();
+			EnableImage(PXCMImage.ColorFormat.COLOR_FORMAT_DEPTH);
 			EnableFaceLocation();
             nframes=0;
             device_lost = false;
@@ -23,7 +24,8 @@ namespace VideoSwitcher
 	    }
 
 	    public override void OnGesture(ref PXCMGesture.Gesture data) {
-		    if (data.active) Trace.WriteLine("OnGesture("+data.label+")");
+		    if (data.active) 
+				Trace.WriteLine("OnGesture("+data.label+")");
 	    }
         public override bool OnDisconnect()
         {
@@ -50,9 +52,28 @@ namespace VideoSwitcher
 			{
 				PXCMFaceAnalysis.Detection.Data data;
 				detector.QueryData( fid, out data);
-			//	Trace.WriteLine( data.rectangle.x+data.rectangle.w/2);
-				window.FacePosition( data.rectangle.x+data.rectangle.w/2, data.rectangle.y+data.rectangle.h/2);
+			
+				if( data.rectangle.x < 10000 && data.rectangle.y < 10000)
+				{
+					uint facex = data.rectangle.x+data.rectangle.w/2;
+					uint facey = data.rectangle.y+data.rectangle.h/2;
+
+					long depth;
+
+					var image = QueryImage(PXCMImage.ImageType.IMAGE_TYPE_DEPTH);
+					PXCMImage.ImageData imgData;
+					image.AcquireAccess( PXCMImage.Access.ACCESS_READ, out imgData);
+					unsafe {
+						short* ar = (short*)imgData.buffer.planes[0];
+						depth = GetFilteredDepth( ar, data.rectangle.x/2, data.rectangle.y/2, data.rectangle.w/2, data.rectangle.h/2, image.imageInfo.width);
+					//	Trace.WriteLine( depth);
+					}
+					image.ReleaseAccess( ref imgData);
+
+					window.FacePosition( facex, facey, depth, data.rectangle.w);
+				}
 			}
+
 			return !shouldQuit;
 
 			//PXCMGesture gesture = QueryGesture();
@@ -65,5 +86,29 @@ namespace VideoSwitcher
 			//}
 			//return (++nframes<50000);
 	    }
+
+		private unsafe long GetFilteredDepth(short* ar, uint x, uint y, uint w, uint h, uint linew)
+		{
+			//x += w/2;
+			//y += h/2;
+
+			return ar[x+(y)*linew];
+
+			int d = 10, count = 0;
+			long sum = 0;
+			for( int j = -d; j < d; j++)
+				for( int i = -d; i < d; i++)
+				{
+					short value = ar[i+x+(j+y)*linew];
+					if( value < 2000)
+					{
+						sum += value;
+						count++;
+					}
+				}
+			sum /= (long)count;
+			Trace.WriteLine( sum);
+			return sum;
+		}
     };
 }
