@@ -27,6 +27,8 @@ namespace VideoSwitcher
 		MyPipeline pipeline; 
 
 		List<MovieInfo> movies;
+		List<List<MovieInfo>> movieSets = new List<List<MovieInfo>>();
+		int movieSetIndex = 0;
 
 		List<Ellipse> ellipses;
 
@@ -43,6 +45,36 @@ namespace VideoSwitcher
 				new MovieInfo() { url = @"file://C:\work\MIPCUBE\v\9C7DA9935B54648C49BB4D60C5B3E555_bemyapp_copy_s3.mp4", x = 1, y = 0, name = "left front" }, 
 				new MovieInfo() { url = @"file://C:\work\MIPCUBE\v\313146D7BE7278CE151AF53EE2934746_bemyapp_copy_s3.mp4", x = 1, y = 1, name = "left very front" }, 
 			};
+			movieSets.Add( movies);
+
+			movies = new List<MovieInfo>() {
+				new MovieInfo() { url = @"file://C:\work\MIPCUBE\v\4p-c0.avi", x = -0.5, y = -0.5, name = "bottom right" }, 
+				new MovieInfo() { url = @"file://C:\work\MIPCUBE\v\4p-c1.avi", x = 0.5, y = -0.5, name = "bottom left" }, 
+				new MovieInfo() { url = @"file://C:\work\MIPCUBE\v\4p-c2.avi", x = 0.5, y = 0.5, name = "top left" }, 
+				new MovieInfo() { url = @"file://C:\work\MIPCUBE\v\4p-c3.avi", x = -0.5, y = 0.5, name = "top right" }, 
+			};
+			movieSets.Add( movies);
+
+			LoadMovieSet( 0);
+
+			thr = new Thread( Pipeline);
+			thr.Start();
+		}
+
+		private void LoadMovieSet(int index)
+		{
+			movieSetIndex = index;
+			movies = movieSets[index];
+
+			active = null;
+
+			if( players != null)
+			{
+				foreach( var player in players)
+					mainGrid.Children.Remove( player);
+				foreach( var ellipse in ellipses)
+					mainGrid.Children.Remove( ellipse);
+			}
 
 			players = new List<MediaElement>();
 			ellipses = new List<Ellipse>();
@@ -53,6 +85,7 @@ namespace VideoSwitcher
 				player.Height = this.Height;
 				player.Width = this.Width;
 				player.LoadedBehavior = MediaState.Manual;
+				player.MediaEnded += player_MediaEnded;
 				player.MediaOpened += MediaElement1_MediaOpened;
 				player.Source = new Uri( movie.url);
 
@@ -75,8 +108,13 @@ namespace VideoSwitcher
 				Panel.SetZIndex( el, 10);
 			}
 
-			thr = new Thread( Pipeline);
-			thr.Start();
+			SwitchVideo(0);
+		}
+
+		void player_MediaEnded(object sender, RoutedEventArgs e)
+		{
+			((MediaElement)sender).Position = TimeSpan.Zero;
+			((MediaElement)sender).Play();
 		}
 
 		public void Pipeline()
@@ -187,6 +225,28 @@ namespace VideoSwitcher
 		public double Dist( MovieInfo info, Point p)
 		{
 			return Math.Sqrt( (p.X-info.x)*(p.X-info.x) + (p.Y-info.y)*(p.Y-info.y));
+		}
+
+		internal void PrevMovieSet()
+		{
+			movieSetIndex--;
+			if( movieSetIndex < 0)
+				movieSetIndex = movieSets.Count-1;
+
+			Dispatcher.Invoke( (Action)(() => {
+				LoadMovieSet( movieSetIndex);
+			}));
+		}
+
+		internal void NextMovieSet()
+		{
+			movieSetIndex++;
+			if( movieSetIndex == movieSets.Count)
+				movieSetIndex = 0;
+
+			Dispatcher.Invoke( (Action)(() => {
+				LoadMovieSet( movieSetIndex);
+			}));
 		}
 	}
 }

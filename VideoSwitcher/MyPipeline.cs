@@ -25,7 +25,17 @@ namespace VideoSwitcher
 
 	    public override void OnGesture(ref PXCMGesture.Gesture data) {
 		    if (data.active) 
+			{
 				Trace.WriteLine("OnGesture("+data.label+")");
+				if( data.label == PXCMGesture.Gesture.Label.LABEL_NAV_SWIPE_LEFT)
+				{
+					window.PrevMovieSet();
+				} else 
+				if( data.label == PXCMGesture.Gesture.Label.LABEL_NAV_SWIPE_RIGHT)
+				{
+					window.NextMovieSet();
+				}
+			}
 	    }
         public override bool OnDisconnect()
         {
