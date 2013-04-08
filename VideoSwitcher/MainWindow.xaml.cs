@@ -82,8 +82,10 @@ namespace VideoSwitcher
 			{
 				MediaElement player = new MediaElement();
 				player.Visibility = System.Windows.Visibility.Hidden;
-				player.Height = this.Height;
-				player.Width = this.Width;
+				player.Width = mainGrid.RenderSize.Width;
+				player.Height = mainGrid.RenderSize.Height;
+				player.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+				player.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
 				player.LoadedBehavior = MediaState.Manual;
 				player.MediaEnded += player_MediaEnded;
 				player.MediaOpened += MediaElement1_MediaOpened;
@@ -198,7 +200,7 @@ namespace VideoSwitcher
 
 		private Thickness TransformPos(double x, double y)
 		{
-			 return new Thickness( this.Width/2 + -x * 100, this.Height/2 + -y * 100, 0, 0);
+			 return new Thickness( mainGrid.RenderSize.Width/2 + -x * 100, mainGrid.RenderSize.Height/2 + -y * 100, 0, 0);
 		}
 
 		private Point ComputeFacePosition(double x, double y, long depth, uint size)
@@ -247,6 +249,30 @@ namespace VideoSwitcher
 			Dispatcher.Invoke( (Action)(() => {
 				LoadMovieSet( movieSetIndex);
 			}));
+		}
+
+		private void Window_MouseWheel(object sender, MouseWheelEventArgs e)
+		{
+			foreach( var p in players)
+				p.Volume += e.Delta / 1000.0;
+		}
+
+		private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+		{
+			if( players != null)
+			{
+				foreach( var p in players)
+				{
+					p.Width = mainGrid.RenderSize.Width;
+					p.Height = mainGrid.RenderSize.Height;
+				}
+
+				for( int i = 0; i < movies.Count; i++)
+				{
+					Ellipse el = ellipses[i];
+					el.Margin = TransformPos( movies[i].x, movies[i].y);
+				}
+			}
 		}
 	}
 }
