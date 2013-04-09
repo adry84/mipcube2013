@@ -250,11 +250,11 @@ namespace VideoSwitcher
 				double v = active.Volume;
                 if (direction == 1)
                 {
-                    v += 0.1;
+                    v += 1;
                 }
-                else if (v >= 0.1)
+                else if (v > 0)
                 {
-                    v -= 0.1;
+                    v -= 1;
                 }
                 foreach (var p in players)
                 {
@@ -568,5 +568,14 @@ namespace VideoSwitcher
 			if( fullscreen && e.Key == Key.Escape)
 				changeFullscreen();
 		}
+
+        private void VolP_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeVolume(1);
+        }
+        private void VolM_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeVolume(0);
+        }
     }
 }
