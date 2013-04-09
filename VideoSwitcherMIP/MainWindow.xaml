@@ -5,15 +5,15 @@
 
     <Grid Background="Azure" Name="mainGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="400"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="250"/>
             <RowDefinition Height="90"/>
         </Grid.RowDefinitions>
         <TextBlock Text="Angular Video Player" FontSize="25" Grid.Row="0" TextAlignment="Center" HorizontalAlignment="Center" Margin="0,5,0,0" Width="350"/>
         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
             <!-- <Button Content="Pick Vedio" Height="50" Width="250" FontSize="25" Margin="50,0,0,0" /> Click="Pick_Click"-->
            <!-- <MediaElement x:Name="Media" Width="462" Height="250" Margin="50,1,0,0"  />-->
-            <MediaElement Name="Me" HorizontalAlignment="Center"
+            <Rectangle Name="Me" HorizontalAlignment="Center" Fill="Beige"
                       Width="562" Height="250"  Margin="0,1,0,0"     />
 
         </StackPanel>
