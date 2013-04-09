@@ -34,3 +34,16 @@ C:\Users\Adry\Desktop\mipcube\VideoSwitcher\VideoSwitcherMIP\obj\Debug\VideoSwit
 C:\Users\Adry\Desktop\mipcube\VideoSwitcher\VideoSwitcherMIP\obj\Debug\VideoSwitcher.csproj.GenerateResource.Cache
 C:\Users\Adry\Desktop\mipcube\VideoSwitcher\VideoSwitcherMIP\obj\Debug\VideoSwitcher.exe
 C:\Users\Adry\Desktop\mipcube\VideoSwitcher\VideoSwitcherMIP\obj\Debug\VideoSwitcher.pdb
+C:\Users\Adry\mipcube2013\VideoSwitcherMIP\obj\Debug\VideoSwitcher.exe
+C:\Users\Adry\mipcube2013\VideoSwitcherMIP\obj\Debug\VideoSwitcher.pdb
+C:\Users\Adry\mipcube2013\VideoSwitcherMIP\obj\Debug\VideoSwitcher.csprojResolveAssemblyReference.cache
+C:\Users\Adry\mipcube2013\VideoSwitcherMIP\obj\Debug\MainWindow.baml
+C:\Users\Adry\mipcube2013\VideoSwitcherMIP\obj\Debug\MainWindow.g.cs
+C:\Users\Adry\mipcube2013\VideoSwitcherMIP\obj\Debug\App.g.cs
+C:\Users\Adry\mipcube2013\VideoSwitcherMIP\obj\Debug\VideoSwitcher_MarkupCompile.cache
+C:\Users\Adry\mipcube2013\VideoSwitcherMIP\obj\Debug\VideoSwitcher.g.resources
+C:\Users\Adry\mipcube2013\VideoSwitcherMIP\obj\Debug\VideoSwitcher.Properties.Resources.resources
+C:\Users\Adry\mipcube2013\VideoSwitcherMIP\obj\Debug\VideoSwitcher.csproj.GenerateResource.Cache
+C:\Users\Adry\mipcube2013\VideoSwitcherMIP\bin\Debug\VideoSwitcher.exe
+C:\Users\Adry\mipcube2013\VideoSwitcherMIP\bin\Debug\VideoSwitcher.pdb
+C:\Users\Adry\mipcube2013\VideoSwitcherMIP\bin\Debug\libpxcclr.dll
