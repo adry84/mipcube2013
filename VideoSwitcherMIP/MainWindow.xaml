@@ -11,16 +11,13 @@
         <Ellipse Name="Me" Fill="Red" HorizontalAlignment="Left" Height="10" Margin="0,0,0,0" Stroke="Black" VerticalAlignment="Top" Width="10" Panel.ZIndex="10" />
         <Menu HorizontalAlignment="Center" Height="50" Margin="0,0,-0.4,-0.4" VerticalAlignment="Bottom" Width="762" RenderTransformOrigin="-0.726,-0.232" Panel.ZIndex="1" >
            
-                <MenuItem x:Name="Play"  TextBlock.TextAlignment="Center" FontSize="20" Height="40" Width="110" Margin="0,0,0,0"  Click="Play_Click" Header="Play" >
-                <MenuItem.ContextMenu>
-                    <ContextMenu/>
-                </MenuItem.ContextMenu>
-            </MenuItem>
+            <MenuItem x:Name="Play"  TextBlock.TextAlignment="Center" FontSize="20" Height="40" Width="80" Margin="0,0,0,0"  Click="Play_Click" Header="Play" />
             <MenuItem x:Name="Pause" Header="Pause" FontSize="20" Height="40" Width="80" Margin="0,0,0,0" Click="Stop_Click" />
             <MenuItem x:Name="Stop"  Header="Stop" FontSize="20" Height="40" Width="80" Margin="0,0,0,0" Click="Stop_Click" />
             <MenuItem x:Name="Forward"  Header="Forward" FontSize="20" Height="40" Width="80" Margin="0,0,0,0" Click="Forward_Click"/>
             <MenuItem x:Name="Rewind"  Header="Rewind" FontSize="20" Height="40" Width="80" Margin="0,0,0,0" Click="Rewind_Click" />
             <MenuItem x:Name="Screen" Header="Screen" FontSize="20" Height="25" Width="80" Margin="0,0,0,0" Click="Screen_Click" />
+            <MenuItem x:Name="Rotation" Header="Rotation" FontSize="20" Height="25" Width="80" Margin="0,0,0,0" Click="Rotation_Click" RenderTransformOrigin="0.5,0.504" />
             <MenuItem x:Name="BrightPlus" Header="Bright+" FontSize="18" Height="25" Width="80" Margin="0,-25,0,0" Click="BrightP_Click" />
             <MenuItem x:Name="BrightMoins" Header="Bright-" FontSize="18" Height="25" Width="80" Margin="-80,25,0,0" Click="BrightM_Click" />
             <MenuItem x:Name="VolPlus" Header="Vol+" FontSize="18" Height="25" Width="80" Margin="0,-25,0,0" Click="VolP_Click" />

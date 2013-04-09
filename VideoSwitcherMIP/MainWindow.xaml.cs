@@ -66,14 +66,10 @@ namespace VideoSwitcher
         String path = @"file://C:\Users\Adry\Desktop\mipcube\";
 
         bool fullscreen = false;
-        private static bool initializedBrightness = false;
         bool infoDisplaying = false;
 
 
        
-        
-       
-        private static Int32 hdc;
 
 
         public MainWindow()
@@ -576,6 +572,19 @@ namespace VideoSwitcher
         private void VolM_Click(object sender, RoutedEventArgs e)
         {
             ChangeVolume(0);
+        }
+
+        private void Rotation_Click(object sender, RoutedEventArgs e)
+        {
+            if (movies.Count > 1)
+            {
+
+                if (movieSetIndex < movies.Count - 1)
+                    movieSetIndex++;
+                else 
+                    movieSetIndex=0;
+                SwitchVideo(movieSetIndex);
+            }
         }
     }
 }
