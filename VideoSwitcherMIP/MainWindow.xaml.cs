@@ -36,8 +36,8 @@ namespace VideoSwitcher
 		int movieSetIndex = 0;
 
         List<Ellipse> ellipses;
-        //String path = @"file://C:\work\MIPCUBE\v\";
-        String path = @"file://C:\Users\Adry\Desktop\mipcube\";
+        String path = @"file://C:\work\MIPCUBE\v\";
+        //String path = @"file://C:\Users\Adry\Desktop\mipcube\";
 
         Boolean fullscreen = false;
         Boolean infoDisplaying = false;
