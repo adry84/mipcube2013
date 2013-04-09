@@ -29,25 +29,28 @@ namespace VideoSwitcher
                 Trace.WriteLine("OnGesture(" + data.label + ")");
                 if (data.label == PXCMGesture.Gesture.Label.LABEL_POSE_THUMB_UP)
                 {
-                    Trace.WriteLine("OnGesture thumb up");
                     window.ChangeVolume(1);
                 }
                 else  if (data.label == PXCMGesture.Gesture.Label.LABEL_POSE_THUMB_DOWN)
                 {
-                    Trace.WriteLine("OnGesture thumb down");
                     window.ChangeVolume(0);
                 }
                 else if (data.label == PXCMGesture.Gesture.Label.LABEL_NAV_SWIPE_UP)
                 {
-                    Trace.WriteLine("OnGesture swipe up");
                     window.ChangeMediaSpeedRatio(1);
                 }
-                else if (data.label == PXCMGesture.Gesture.Label.LABEL_POSE_THUMB_DOWN)
+                else if (data.label == PXCMGesture.Gesture.Label.LABEL_NAV_SWIPE_DOWN)
                 {
-                    Trace.WriteLine("OnGesture swipe down");
                     window.ChangeMediaSpeedRatio(0);
-                }
-
+                } else 
+				if( data.label == PXCMGesture.Gesture.Label.LABEL_NAV_SWIPE_LEFT)
+				{
+					window.PrevMovieSet();
+				} else
+				if( data.label == PXCMGesture.Gesture.Label.LABEL_NAV_SWIPE_RIGHT)
+				{
+					window.NextMovieSet();
+				}
             }
 	    }
         public override bool OnDisconnect()

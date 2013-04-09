@@ -193,31 +193,25 @@ namespace VideoSwitcher
             Dispatcher.Invoke((Action)(() =>
             {
                 if (active == null)
-                {
-                    PlayAllVideo(); 
-                }
-                else
-                {
-                    double v = active.Volume;
-                    if (direction == 1)
-                    {
-                        v += 100;
-                    }
-                    else if (v > 0)
-                    {
-                        v--;
-                    }
-                    foreach (var p in players)
-                    {
-                        Trace.WriteLine("change volume " + v);
-                        p.Volume = v;
+					return;
 
-                    }
+				double v = active.Volume;
+                if (direction == 1)
+                {
+                    v += 0.1;
+                }
+                else if (v >= 0.1)
+                {
+                    v -= 0.1;
+                }
+                foreach (var p in players)
+                {
+                    Trace.WriteLine("change volume " + v);
+                    p.Volume = v;
+
                 }
             }));
         }
-
-
 
         // Change the speed of the media. 
         public void ChangeMediaSpeedRatio(int direction)
@@ -225,25 +219,21 @@ namespace VideoSwitcher
             Dispatcher.Invoke((Action)(() =>
             {
                 if (active == null)
+					return;
+               
+                double v = active.SpeedRatio;
+                if (direction == 1)
                 {
-                    PlayAllVideo(); 
+                    v += 4;
                 }
-                else
+                else if (v > 1)
                 {
-                    double v = active.SpeedRatio;
-                    if (direction == 1)
-                    {
-                        v += 10;
-                    }
-                    else if (v >= 10)
-                    {
-                        v -= 10;
-                    }
-                    foreach (var p in players)
-                    {
-                        Trace.WriteLine("change speed " + v);
-                        p.SpeedRatio = (double)v;
-                    }
+                    v -= 4;
+                }
+                foreach (var p in players)
+                {
+                    Trace.WriteLine("change speed " + v);
+                    p.SpeedRatio = (double)v;
                 }
             }));
         }
@@ -256,6 +246,7 @@ namespace VideoSwitcher
                 {
                     PlayAllVideo(); 
 					active.Visibility = System.Windows.Visibility.Visible;
+					ellipses[id].Fill = new SolidColorBrush(Color.FromRgb(0, 0, 255));
                 }
                 if (active == players[id])
                     return;
