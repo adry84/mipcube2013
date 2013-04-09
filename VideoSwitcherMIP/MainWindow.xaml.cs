@@ -209,20 +209,21 @@ namespace VideoSwitcher
 
         public void changeFullscreen()
         {
-            if (fullscreen == false)
-            {
-                this.WindowStyle = WindowStyle.None;
-                this.WindowState = WindowState.Maximized;
-                
-            }
-            else 
-            {
+         
 
-                this.WindowStyle = WindowStyle.SingleBorderWindow;
-                this.WindowState = WindowState.Normal;         
-            }
-           
-                
+			Dispatcher.Invoke((Action)(() =>
+            {
+				if (fullscreen == false)
+				{
+					this.WindowStyle = WindowStyle.None;
+					this.WindowState = WindowState.Maximized;
+				}
+				else 
+				{
+                    this.WindowStyle = WindowStyle.SingleBorderWindow;
+                    this.WindowState = WindowState.Normal;         
+                }
+
 
                 foreach (MediaElement player in players)
                 {
@@ -233,7 +234,9 @@ namespace VideoSwitcher
                 }
 
 
-            fullscreen = !fullscreen;
+                fullscreen = !fullscreen;
+
+			}));
         }
 
 
@@ -242,31 +245,25 @@ namespace VideoSwitcher
             Dispatcher.Invoke((Action)(() =>
             {
                 if (active == null)
-                {
-                    PlayAllVideo(); 
-                }
-                else
-                {
-                    double v = active.Volume;
-                    if (direction == 1)
-                    {
-                        v += 100;
-                    }
-                    else if (v > 0)
-                    {
-                        v--;
-                    }
-                    foreach (var p in players)
-                    {
-                        Trace.WriteLine("change volume " + v);
-                        p.Volume = v;
+					return;
 
-                    }
+				double v = active.Volume;
+                if (direction == 1)
+                {
+                    v += 0.1;
+                }
+                else if (v >= 0.1)
+                {
+                    v -= 0.1;
+                }
+                foreach (var p in players)
+                {
+                    Trace.WriteLine("change volume " + v);
+                    p.Volume = v;
+
                 }
             }));
         }
-
-
 
         // Change the speed of the media. 
         public void ChangeMediaSpeedRatio(int val)
@@ -274,11 +271,9 @@ namespace VideoSwitcher
             Dispatcher.Invoke((Action)(() =>
             {
                 if (active == null)
-                {
-                    PlayAllVideo(); 
-                }
-                else
-                {
+					return;
+               
+
                     double v = active.SpeedRatio;
                     if (val>0 )
                     {
@@ -293,7 +288,7 @@ namespace VideoSwitcher
                         Trace.WriteLine("change speed " + v);
                         p.SpeedRatio = (double)v;
                     }
-                }
+                
             }));
         }
 
@@ -304,6 +299,8 @@ namespace VideoSwitcher
                 if (active == null)
                 {
                     PlayAllVideo(); 
+					active.Visibility = System.Windows.Visibility.Visible;
+					ellipses[id].Fill = new SolidColorBrush(Color.FromRgb(0, 0, 255));
                 }
                 if (active == players[id])
                     return;
@@ -485,15 +482,16 @@ namespace VideoSwitcher
 
         private Thickness TransformPos(double x, double y)
 		{
-			 return new Thickness( mainGrid.RenderSize.Width/2 + -x * 100, mainGrid.RenderSize.Height/2 + -y * 100, 0, 0);
+			 return new Thickness( mainGrid.RenderSize.Width-120 + -x * 100, mainGrid.RenderSize.Height-120 + -y * 100, 0, 0);
 		}
 
 		private Point ComputeFacePosition(double x, double y, long depth, uint size)
 		{
 			// depth: 300 is close to screen, 600 is far
 
-			double result_y = 1-(depth-250.0)/200;
-			result_y = -300.0/size+2;
+			double result_y1 = 1-(depth-250.0)/200;
+			double result_y2 = -300.0/size+2;
+			double result_y = result_y1*0 + result_y2*1;
 
 			return new Point( (x/640-0.5)*2, result_y);
 		}
@@ -558,6 +556,17 @@ namespace VideoSwitcher
 					el.Margin = TransformPos( movies[i].x, movies[i].y);
 				}
 			}
+		}
+
+		private void Window_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			changeFullscreen();
+		}
+
+		private void Window_KeyDown(object sender, KeyEventArgs e)
+		{
+			if( fullscreen && e.Key == Key.Escape)
+				changeFullscreen();
 		}
     }
 }
