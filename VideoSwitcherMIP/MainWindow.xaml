@@ -3,7 +3,35 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow"  Loaded="Window_Loaded" Closing="Window_Closing">
 
-    <Grid Background="White" Name="mainGrid">
-		<Ellipse Name="Me" Fill="Red" HorizontalAlignment="Left" Height="10" Margin="0,0,0,0" Stroke="Black" VerticalAlignment="Top" Width="10" Panel.ZIndex="10" />
+    <Grid Name="mainGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+     
+        <Ellipse Name="Me" Fill="Red" HorizontalAlignment="Left" Height="10" Margin="0,0,0,0" Stroke="Black" VerticalAlignment="Top" Width="10" Panel.ZIndex="10" />
+        <Menu HorizontalAlignment="Center" Height="50" Margin="10,0,9.6,0" VerticalAlignment="Bottom" Width="742" RenderTransformOrigin="-0.726,-0.232" Panel.ZIndex="1" >
+           
+                <MenuItem x:Name="Play"  TextBlock.TextAlignment="Center" FontSize="20" Height="40" Width="110" Margin="0,0,0,0"  Click="Play_Click" Header="Play" >
+                <MenuItem.ContextMenu>
+                    <ContextMenu/>
+                </MenuItem.ContextMenu>
+            </MenuItem>
+            <MenuItem x:Name="Pause" Header="Pause" FontSize="20" Height="40" Width="110" Margin="0,0,0,0" Click="Stop_Click" />
+            
+            <MenuItem x:Name="Stop"  Header="Stop" FontSize="20" Height="40" Width="110" Margin="0,0,0,0" Click="Stop_Click" />
+                <!--  Click="Stop_Click"/> -->
+            <MenuItem x:Name="Forward"  Header="Forward" FontSize="20" Height="40" Width="110" Margin="0,0,0,0" Click="Forward_Click"/>
+                <!--  Click="Forword_Click"/> -->
+            <MenuItem x:Name="Rewind"  Header="Rewind" FontSize="20" Height="40" Width="110" Margin="0,0,0,0" Click="Rewind_Click" />
+            <MenuItem x:Name="Screen" Header="Screen" FontSize="20" Height="25" Width="110" Margin="0,0,0,0" Click="Screen_Click" />
+            <MenuItem x:Name="BrightPlus" Header="Bright +" FontSize="18" Height="25" Width="110" Margin="0,-25,0,0" Click="BrightP_Click" />
+            <MenuItem x:Name="BrightMoins" Header="Bright -" FontSize="18" Height="25" Width="110" Margin="-110,25,0,0" Click="BrightM_Click" />
+           
+
+        </Menu>
+
+
     </Grid>
+
+ 
 </Window>

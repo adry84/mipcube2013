@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows;
@@ -22,10 +23,34 @@ namespace VideoSwitcher
     /// </summary>
     /// 														  
 
-    
 
+    
     public partial class MainWindow : Window
     {
+        [DllImport("user32")]
+        private static extern IntPtr GetDC(IntPtr Handle);
+
+        [DllImport("user32")]
+        private static extern int ReleaseDC(IntPtr Handle, IntPtr DeviceContext);
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        private struct RAMP
+        {
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
+            public ushort[] Red;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
+            public ushort[] Green;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
+            public ushort[] Blue;
+        }
+
+        [DllImport("gdi32")]
+        private static extern int GetDeviceGammaRamp(IntPtr DeviceContext, ref RAMP lpv);
+
+        [DllImport("gdi32")]
+        private static extern int SetDeviceGammaRamp(IntPtr DeviceContext, ref RAMP lpv);
+
+
         MediaElement active;
         List<MediaElement> players;
         Thread thr;
@@ -34,13 +59,22 @@ namespace VideoSwitcher
         List<MovieInfo> movies;
 		List<List<MovieInfo>> movieSets = new List<List<MovieInfo>>();
 		int movieSetIndex = 0;
-
+        byte currentBrightness = 0;
+       
         List<Ellipse> ellipses;
-        String path = @"file://C:\work\MIPCUBE\v\";
-        //String path = @"file://C:\Users\Adry\Desktop\mipcube\";
+        //String path = @"file://C:\work\MIPCUBE\v\";
+        String path = @"file://C:\Users\Adry\Desktop\mipcube\";
 
-        Boolean fullscreen = false;
-        Boolean infoDisplaying = false;
+        bool fullscreen = false;
+        private static bool initializedBrightness = false;
+        bool infoDisplaying = false;
+
+
+       
+        
+       
+        private static Int32 hdc;
+
 
         public MainWindow()
         {
@@ -66,7 +100,9 @@ namespace VideoSwitcher
 			movieSets.Add( movies);
 
 			LoadMovieSet( 0);
-
+          
+            InitBrightness();
+            
 			thr = new Thread( Pipeline);
 			thr.Start();
         }
@@ -177,6 +213,7 @@ namespace VideoSwitcher
             {
                 this.WindowStyle = WindowStyle.None;
                 this.WindowState = WindowState.Maximized;
+                
             }
             else 
             {
@@ -184,6 +221,18 @@ namespace VideoSwitcher
                 this.WindowStyle = WindowStyle.SingleBorderWindow;
                 this.WindowState = WindowState.Normal;         
             }
+           
+                
+
+                foreach (MediaElement player in players)
+                {
+                  
+                    player.Width = mainGrid.RenderSize.Width;
+                    player.Height = mainGrid.RenderSize.Height;
+
+                }
+
+
             fullscreen = !fullscreen;
         }
 
@@ -220,7 +269,7 @@ namespace VideoSwitcher
 
 
         // Change the speed of the media. 
-        public void ChangeMediaSpeedRatio(int direction)
+        public void ChangeMediaSpeedRatio(int val)
         {
             Dispatcher.Invoke((Action)(() =>
             {
@@ -231,13 +280,13 @@ namespace VideoSwitcher
                 else
                 {
                     double v = active.SpeedRatio;
-                    if (direction == 1)
+                    if (val>0 )
                     {
-                        v += 10;
+                        v += val;
                     }
-                    else if (v >= 10)
+                    else if (v > 0)
                     {
-                        v -= 10;
+                        v -= val;
                     }
                     foreach (var p in players)
                     {
@@ -302,15 +351,111 @@ namespace VideoSwitcher
             active.Play();
         }
 
-        public void changeBrightness(int val)
+
+        public  void InitBrightness()
+        {
+            
+            IntPtr gammaDC = GetDC(IntPtr.Zero);
+            if (gammaDC != System.IntPtr.Zero)
+            {
+                RAMP gammaArray = new RAMP();
+                GetDeviceGammaRamp(gammaDC, ref gammaArray);
+                currentBrightness = (byte)(gammaArray.Red[1] - 128);
+            }
+            ReleaseDC(IntPtr.Zero, gammaDC);
+           
+        }
+
+        public static void SetBrightness(byte Brightness)
+        {
+            IntPtr gammaDC = GetDC(IntPtr.Zero);
+            if (gammaDC != System.IntPtr.Zero)
+            {
+                RAMP gammaArray = new RAMP();
+                gammaArray.Red = new ushort[256];
+                gammaArray.Green = new ushort[256];
+                gammaArray.Blue = new ushort[256];
+                for (int i = 0; i < 256; i++)
+                    gammaArray.Red[i] = gammaArray.Green[i] = gammaArray.Blue[i] = (ushort)Math.Min(i * (Brightness + 128), ushort.MaxValue);
+                SetDeviceGammaRamp(gammaDC, ref gammaArray);
+            }
+            ReleaseDC(IntPtr.Zero, gammaDC);
+        }
+
+        
+
+       
+/// END VIDEO ACTIONS
+
+    
+ #region Event Handlers
+
+        public void Play_Click(object sender, RoutedEventArgs e)
         {
             if (active == null)
             {
                 PlayAllVideo();
             }
-            //TODO
+            active.Play();
         }
-/// END VIDEO ACTIONS
+
+        public void Stop_Click(object sender, RoutedEventArgs e)
+        {
+            if (active == null)
+            {
+                PlayAllVideo();
+            }
+            active.Stop();
+        }
+
+        public void Forward_Click(object sender, RoutedEventArgs e)
+        {
+           
+            ChangeMediaSpeedRatio(10);
+        }
+
+        public void Rewind_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeMediaSpeedRatio(-10);
+        }
+
+
+        public void BrightM_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (currentBrightness > 0)
+                currentBrightness--;
+
+            Trace.WriteLine("currentBrightness : " + currentBrightness);
+            SetBrightness(currentBrightness);
+        }
+        public void BrightP_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (currentBrightness < 255)
+                currentBrightness++;
+            Trace.WriteLine("currentBrightness : " + currentBrightness);
+            SetBrightness(currentBrightness);
+        }
+        public void Bright_Click(object sender, RoutedEventArgs e)
+        {
+           
+            if (currentBrightness < 255)
+                currentBrightness++;
+            else if(currentBrightness>0)
+                currentBrightness--;
+
+            Trace.WriteLine("currentBrightness : " + currentBrightness);
+            SetBrightness(currentBrightness);
+        }
+
+        public void Screen_Click(object sender, RoutedEventArgs e)
+        {
+            changeFullscreen();
+        }
+
+#endregion
+
 
         public void HandPosition(float x, float y)
         {

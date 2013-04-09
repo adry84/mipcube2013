@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoSwitcherMIP", "VideoSwitcherMIP\VideoSwitcher.csproj", "{F9569E08-F4EF-4EFB-9FDF-5E4D07CFF1F9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoSwitcher", "VideoSwitcherMIP\VideoSwitcher.csproj", "{F9569E08-F4EF-4EFB-9FDF-5E4D07CFF1F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
