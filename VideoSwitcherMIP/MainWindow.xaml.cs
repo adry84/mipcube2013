@@ -255,6 +255,7 @@ namespace VideoSwitcher
                 if (active == null)
                 {
                     PlayAllVideo(); 
+					active.Visibility = System.Windows.Visibility.Visible;
                 }
                 if (active == players[id])
                     return;
