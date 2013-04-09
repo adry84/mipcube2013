@@ -23,7 +23,8 @@ namespace VideoSwitcher
 			window = w;
 	    }
 
-	    public override void OnGesture(ref PXCMGesture.Gesture data) {
+	    public override void OnGesture(ref PXCMGesture.Gesture data) 
+		{
             if (data.active)
             {
                 Trace.WriteLine("OnGesture(" + data.label + ")");
@@ -50,6 +51,10 @@ namespace VideoSwitcher
 				if( data.label == PXCMGesture.Gesture.Label.LABEL_NAV_SWIPE_RIGHT)
 				{
 					window.NextMovieSet();
+				} else
+				if( data.label == PXCMGesture.Gesture.Label.LABEL_HAND_WAVE)
+				{
+					window.changeFullscreen();
 				}
             }
 	    }
