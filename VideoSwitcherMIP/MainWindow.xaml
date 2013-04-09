@@ -13,10 +13,9 @@
         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
             <!-- <Button Content="Pick Vedio" Height="50" Width="250" FontSize="25" Margin="50,0,0,0" /> Click="Pick_Click"-->
            <!-- <MediaElement x:Name="Media" Width="462" Height="250" Margin="50,1,0,0"  />-->
-            <MediaElement Name="Me" HorizontalAlignment="Center"
-                      Width="562" Height="250"  Margin="0,1,0,0"     />
+			<Ellipse Name="Me" Fill="Red" HorizontalAlignment="Left" Height="10" Margin="0,0,0,0" Stroke="Black" VerticalAlignment="Top" Width="10" Panel.ZIndex="10" />
 
-        </StackPanel>
+		</StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center">
             <Button Content="Play" FontSize="20" Height="40" Width="110" Margin="10,50,0,0" /> <!--Click="Play_click"-->
             <Button Content="Pause" FontSize="20" Height="40" Width="110" Margin="50,50,0,0" /> <!-- Click="Pause_click"/>-->

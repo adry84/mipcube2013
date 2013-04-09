@@ -47,3 +47,5 @@ C:\Users\Adry\mipcube2013\VideoSwitcherMIP\obj\Debug\VideoSwitcher.csproj.Genera
 C:\Users\Adry\mipcube2013\VideoSwitcherMIP\bin\Debug\VideoSwitcher.exe
 C:\Users\Adry\mipcube2013\VideoSwitcherMIP\bin\Debug\VideoSwitcher.pdb
 C:\Users\Adry\mipcube2013\VideoSwitcherMIP\bin\Debug\libpxcclr.dll
+C:\work\MIPCUBE\VideoSwitcher\VideoSwitcherMIP\obj\Debug\VideoSwitcher.exe
+C:\work\MIPCUBE\VideoSwitcher\VideoSwitcherMIP\obj\Debug\VideoSwitcher.pdb
