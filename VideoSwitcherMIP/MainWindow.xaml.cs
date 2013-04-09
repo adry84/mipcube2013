@@ -67,7 +67,7 @@ namespace VideoSwitcher
 
         bool fullscreen = false;
         bool infoDisplaying = false;
-
+        
 
        
 
@@ -194,11 +194,11 @@ namespace VideoSwitcher
         {
             if (!infoDisplaying)
             {
-                //TODO SHOW SOME LABEL OVER THE VIDEO
+                Info.Visibility = System.Windows.Visibility.Visible;
             }
             else
             {
-                //TODO MASK SOME LABEL
+                Info.Visibility = System.Windows.Visibility.Hidden;
             }
             infoDisplaying = !infoDisplaying;
         }
@@ -585,6 +585,11 @@ namespace VideoSwitcher
                     movieSetIndex=0;
                 SwitchVideo(movieSetIndex);
             }
+        }
+
+        private void InfoBtn_Click(object sender, RoutedEventArgs e)
+        {
+            displayInfo();
         }
     }
 }

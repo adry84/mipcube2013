@@ -17,6 +17,7 @@
             <MenuItem x:Name="Forward"  Header="Forward" FontSize="20" Height="40" Width="80" Margin="0,0,0,0" Click="Forward_Click"/>
             <MenuItem x:Name="Rewind"  Header="Rewind" FontSize="20" Height="40" Width="80" Margin="0,0,0,0" Click="Rewind_Click" />
             <MenuItem x:Name="Screen" Header="Screen" FontSize="20" Height="25" Width="80" Margin="0,0,0,0" Click="Screen_Click" />
+            <MenuItem x:Name="InfoBtn" Header="Info" FontSize="20" Height="25" Width="60" Margin="0,0,0,0" Click="InfoBtn_Click" />
             <MenuItem x:Name="Rotation" Header="Rotation" FontSize="20" Height="25" Width="80" Margin="0,0,0,0" Click="Rotation_Click" RenderTransformOrigin="0.5,0.504" />
             <MenuItem x:Name="BrightPlus" Header="Bright+" FontSize="18" Height="25" Width="80" Margin="0,-25,0,0" Click="BrightP_Click" />
             <MenuItem x:Name="BrightMoins" Header="Bright-" FontSize="18" Height="25" Width="80" Margin="-80,25,0,0" Click="BrightM_Click" />
@@ -25,6 +26,11 @@
 
 
         </Menu>
+        <Label Name="Info" Content="I am a very usefull info about this video!" TextBlock.Foreground="White" FontWeight="SemiBold" HorizontalAlignment="Center" Height="72" Margin="0,0,0,0" VerticalAlignment="Top" Width="321" Background="#0018206D" Panel.ZIndex="110" TextOptions.TextHintingMode="Animated" FontFamily="Segoe UI" FontSize="30" Visibility="Hidden" >
+            <Label.Effect>
+                <DropShadowEffect Color="#FFEEEEEE"/>
+            </Label.Effect>
+        </Label>
 
 
     </Grid>
